@@ -1,7 +1,6 @@
 ---
 - name: Deploy webserver on Spacelift
-  hosts: localhost
-  connection: local
+  hosts: all
   gather_facts: true
   ignore_unreachable: true
   vars_files:
