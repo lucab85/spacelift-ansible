@@ -6,11 +6,12 @@
   vars_files:
     - vars/default.yml
   tasks:
-    - name: Install Apache packages
+    - name: Install Apache packages on RedHat family
       become: true
       ansible.builtin.yum:
         name: httpd
         state: present
+      when: ansible_os_family == "RedHat"
 
     - name: Create document root
       become: true
@@ -33,12 +34,12 @@
         src: index.html.j2
         dest: "{{ doc_root }}/index.html"
 
-    - name: Ensure httpd is running
+    - name: Ensure Apache is running on RedHat family
       become: true
       ansible.builtin.service:
         name: httpd
         state: started
-      ignore_errors: "{{ ansible_check_mode }}"
+      when: ansible_os_family == "RedHat"
 
   handlers:
     - name: Restart server
@@ -46,4 +47,3 @@
       ansible.builtin.service:
         name: httpd
         state: restarted
-      ignore_errors: "{{ ansible_check_mode }}"
